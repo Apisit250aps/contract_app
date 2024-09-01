@@ -7,7 +7,7 @@ interface HeroProps {
 const HeroLayout: FC<HeroProps> = ({ children }) => {
   return (
     <div className="hero bg-base-200 min-h-screen">
-      <div className="hero-content text-center min-w-96 flex">{children}</div>
+      <div className="hero-content text-center min-w-96">{children}</div>
     </div>
   )
 }

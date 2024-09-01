@@ -1,35 +1,84 @@
-import { FC, useState } from "react"
+import React, { FC, useState } from "react"
+import axios, { AxiosError } from "axios"
+import { useNavigate } from "react-router-dom"
+import Swal from "sweetalert2"
 import UsernameInput from "../inputs/Username"
 import PasswordInput from "../inputs/PasswordInput"
 import LoginService, {
   ILoginService
 } from "../../../services/auth/LoginService"
-import Swal from "sweetalert2"
-//
+
+interface FormErrors {
+  username?: string
+  password?: string
+}
+
 const LoginForm: FC = () => {
   const [username, setUsername] = useState<string>("")
   const [password, setPassword] = useState<string>("")
+  const [errors, setErrors] = useState<FormErrors>({})
+  const navigate = useNavigate()
+  const validateField = (name: string, value: string): string | undefined => {
+    switch (name) {
+      case "username":
+        return value.trim() === "" ? "Username is required" : undefined
+      case "password":
+        return value.length < 6
+          ? "Password must be at least 6 characters long"
+          : undefined
+      default:
+        return undefined
+    }
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    if (name === "username") setUsername(value)
+    if (name === "password") setPassword(value)
+
+    const error = validateField(name, value)
+    setErrors((prev) => ({ ...prev, [name]: error }))
+  }
+
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {
+      username: validateField("username", username),
+      password: validateField("password", password)
+    }
+    setErrors(newErrors)
+    return !Object.values(newErrors).some((error) => error !== undefined)
+  }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const credentials: ILoginService = {
-      username: username,
-      password: password
-    }
-    await LoginService(credentials)
-      .then((response) => {
-        if (response.status === 200 && response.data.token) {
-          Swal.fire({
-            title: "Success!",
-            text: "You have successfully logged in.",
-            icon: "success",
-            confirmButtonText: "OK"
-          })
-        }
+    if (!validateForm()) {
+      Swal.fire({
+        title: "Validation Error",
+        text: "Please correct the errors in the form",
+        icon: "error",
+        confirmButtonText: "OK"
       })
-      .catch((error) => {
-        if (error.response) {
-          if (error.response.status === 400) {
+      return
+    }
+
+    const credentials: ILoginService = { username, password }
+
+    try {
+      const response = await LoginService(credentials)
+      if (response.status === 200 && response.data.token) {
+        Swal.fire({
+          title: "Success!",
+          text: "You have successfully logged in.",
+          icon: "success",
+          confirmButtonText: "OK"
+        })
+        navigate("/")
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError<{ message: string }>
+        if (axiosError.response) {
+          if (axiosError.response.status === 400) {
             Swal.fire({
               title: "Login Failed",
               text: "Invalid username or password.",
@@ -39,13 +88,14 @@ const LoginForm: FC = () => {
           } else {
             Swal.fire({
               title: "Login Failed",
-              text: "An unexpected error occurred. Please try again later.",
+              text:
+                axiosError.response.data.message ||
+                "An unexpected error occurred. Please try again later.",
               icon: "error",
               confirmButtonText: "OK"
             })
           }
-        } else if (error.request) {
-          // The request was made but no response was received
+        } else if (axiosError.request) {
           Swal.fire({
             title: "Network Error",
             text: "Unable to connect to the server. Please check your internet connection.",
@@ -53,7 +103,6 @@ const LoginForm: FC = () => {
             confirmButtonText: "OK"
           })
         } else {
-          // Something happened in setting up the request that triggered an Error
           Swal.fire({
             title: "Error",
             text: "An unexpected error occurred. Please try again later.",
@@ -61,33 +110,43 @@ const LoginForm: FC = () => {
             confirmButtonText: "OK"
           })
         }
-      })
+      } else {
+        Swal.fire({
+          title: "Error",
+          text: "An unexpected error occurred. Please try again later.",
+          icon: "error",
+          confirmButtonText: "OK"
+        })
+      }
+    }
   }
 
   return (
-    <>
-      <div className="card bg-base-100 w-full shrink-0 shadow-2xl">
-        <form className="card-body" onSubmit={handleSubmit}>
-          <UsernameInput
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder={"Username"}
-          />
-          <PasswordInput
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder={"Password"}
-            onToggle={true}
-          />
-          <div className="form-control mt-2">
-            <button className="btn btn-primary">Login</button>
-          </div>
-          <a href="/auth/register" className="text-end underline">
-            <small>Go to Sign up!</small>
-          </a>
-        </form>
-      </div>
-    </>
+    <div className="card bg-base-100 w-full shrink-0 shadow-2xl">
+      <form className="card-body" onSubmit={handleSubmit}>
+        <UsernameInput
+          value={username}
+          onChange={handleChange}
+          placeholder="Username"
+          error={errors.username}
+        />
+        <PasswordInput
+          value={password}
+          onChange={handleChange}
+          placeholder="Password"
+          onToggle={true}
+          error={errors.password}
+        />
+        <div className="form-control mt-2">
+          <button className="btn btn-primary" type="submit">
+            Login
+          </button>
+        </div>
+        <a href="/auth/register" className="text-end underline">
+          <small>Go to Sign up!</small>
+        </a>
+      </form>
+    </div>
   )
 }
 

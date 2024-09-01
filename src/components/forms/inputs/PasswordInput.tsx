@@ -5,13 +5,15 @@ interface InputProps {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
   placeholder?: string
   onToggle?: boolean
+  error?: string
 }
 
 const PasswordInput: FC<InputProps> = ({
   value,
   onChange,
   placeholder = "Password",
-  onToggle = false
+  onToggle = false,
+  error
 }) => {
   const [showPassword, setShowPassword] = useState(false)
   const togglePasswordVisibility = () => {
@@ -33,6 +35,7 @@ const PasswordInput: FC<InputProps> = ({
           />
         </svg>
         <input
+        name="password"
           type={showPassword ? "text" : "password"}
           className="grow"
           placeholder={placeholder}
@@ -40,6 +43,7 @@ const PasswordInput: FC<InputProps> = ({
           onChange={onChange}
         />
       </label>
+      {error && <span className="text-error text-sm text-start">{error}</span>}
       {onToggle ? (
         <small className="flex justify-end">
           <a
