@@ -14,10 +14,10 @@ const DrawerLayout: FC<DrawerLayoutProp> = ({ children }) => {
     <>
       <div className="drawer lg:drawer-open">
         <input id="drawer-layout" type="checkbox" className="drawer-toggle" />
-        <div className="drawer-content py-2 px-2 lg:px-0">
+        <div className="drawer-content py-2 px-2">
           <DrawerNav />
           {/* Page content here */}
-          <main>{children}</main>
+          <main className="mt-3">{children}</main>
         </div>
         <div className="drawer-side p-0 lg:p-2">
           <label
