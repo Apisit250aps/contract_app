@@ -1,8 +1,8 @@
-import HeroLayout from "../layouts/HeroLayout"
+import DrawerLayout from "../layouts/DrawerLayout"
 export default function Index() {
   return (
     <>
-      <HeroLayout>
+      <DrawerLayout>
         <h1 className="text-5xl font-bold">Hello there</h1>
         <p className="py-6">
           Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
@@ -10,7 +10,7 @@ export default function Index() {
           id nisi.
         </p>
         <button className="btn btn-primary">Get Started</button>
-      </HeroLayout>
+      </DrawerLayout>
     </>
   )
 }

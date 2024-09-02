@@ -1,9 +1,8 @@
 import axios from "axios"
 import Swal from "sweetalert2"
-
+import { JWT_TOKEN, STORE_TOKEN } from "../middleware/auth.middleware";
 // Get the token from localStorage or any other storage mechanism you're using
-const STORE_TOKEN = "token"
-export const JWT_TOKEN = localStorage.getItem(STORE_TOKEN)
+
 //
 const handleSessionExpiration = () => {
   Swal.fire({
