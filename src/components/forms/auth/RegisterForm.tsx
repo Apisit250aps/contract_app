@@ -2,9 +2,10 @@ import React, { FC, useState } from "react"
 import UsernameInput from "../inputs/Username"
 import PasswordInput from "../inputs/PasswordInput"
 import EmailInput from "../inputs/EmailInput"
-import RegisterService, {
-  IRegisterService
-} from "../../../services/auth/RegisterService"
+import {
+  IRegisterService,
+  RegisterService
+} from "../../../services/auth.service"
 import Swal from "sweetalert2"
 import axios, { AxiosError } from "axios"
 

@@ -4,9 +4,7 @@ import { useNavigate } from "react-router-dom"
 import Swal from "sweetalert2"
 import UsernameInput from "../inputs/Username"
 import PasswordInput from "../inputs/PasswordInput"
-import LoginService, {
-  ILoginService
-} from "../../../services/auth/LoginService"
+import { ILoginService, LoginService } from "../../../services/auth.service"
 
 interface FormErrors {
   username?: string
