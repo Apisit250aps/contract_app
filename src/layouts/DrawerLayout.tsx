@@ -3,13 +3,11 @@ import DrawerNav from "../components/navigate/nav/DrawerNav"
 import DrawerSideContent from "../components/navigate/menu/side/DrawerSideContent"
 import DrawerLink from "../components/navigate/nav/DrawerLink"
 
-
 interface DrawerLayoutProp {
   children?: ReactNode
 }
 
 const DrawerLayout: FC<DrawerLayoutProp> = ({ children }) => {
-  
   return (
     <>
       <div className="drawer lg:drawer-open">
@@ -29,6 +27,10 @@ const DrawerLayout: FC<DrawerLayoutProp> = ({ children }) => {
             <DrawerLink to={"/"}>
               <i className="bx bx-home-alt"></i>
               Home
+            </DrawerLink>
+            <DrawerLink to={"/project"}>
+              <i className="bx bx-briefcase"></i>
+              Project
             </DrawerLink>
           </DrawerSideContent>
         </div>
