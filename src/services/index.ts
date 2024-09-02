@@ -2,7 +2,9 @@ import axios from "axios"
 import Swal from "sweetalert2"
 
 // Get the token from localStorage or any other storage mechanism you're using
-const token = localStorage.getItem("token")
+const STORE_TOKEN = "token"
+export const JWT_TOKEN = localStorage.getItem(STORE_TOKEN)
+//
 const handleSessionExpiration = () => {
   Swal.fire({
     title: "Session Expired",
@@ -12,7 +14,7 @@ const handleSessionExpiration = () => {
     allowOutsideClick: false // Prevent closing by clicking outside the alert
   }).then(() => {
     // Clear the token and other session data
-    localStorage.removeItem("token")
+    localStorage.removeItem(STORE_TOKEN)
 
     // Redirect to the login page
     window.location.href = "/auth/login"
@@ -22,7 +24,7 @@ const apiClient = axios.create({
   baseURL: "http://localhost:3000", // Replace with your API's base URL
   headers: {
     "Content-Type": "application/json",
-    Authorization: token ? `Bearer ${token}` : ""
+    Authorization: JWT_TOKEN ? `Bearer ${JWT_TOKEN}` : ""
   }
 })
 
