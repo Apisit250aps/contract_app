@@ -1,5 +1,5 @@
 import { FC } from "react"
-import DrawerLayout from "../../layouts/DrawerLayout"
+import DrawerLayout from "../../components/layouts/DrawerLayout"
 const ProjectListPage: FC = () => {
   return (
     <>

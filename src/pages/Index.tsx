@@ -1,4 +1,4 @@
-import DrawerLayout from "../layouts/DrawerLayout"
+import DrawerLayout from "../components/layouts/DrawerLayout"
 export default function Index() {
   return (
     <>

@@ -1,7 +1,7 @@
 import { FC, ReactNode } from "react"
-import DrawerNav from "../components/navigate/nav/DrawerNav"
-import DrawerSideContent from "../components/navigate/menu/side/DrawerSideContent"
-import DrawerLink from "../components/navigate/nav/DrawerLink"
+import DrawerNav from "../navigate/nav/DrawerNav"
+import DrawerSideContent from "../navigate/menu/side/DrawerSideContent"
+import DrawerLink from "../navigate/nav/DrawerLink"
 
 interface DrawerLayoutProp {
   children?: ReactNode
