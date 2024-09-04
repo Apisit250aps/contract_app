@@ -1,8 +1,9 @@
-import { FC } from "react";
-import { Outlet } from "react-router-dom";
-import DrawerNav from "../navigate/nav/DrawerNav";
-import DrawerSideContent from "../navigate/menu/side/DrawerSideContent";
-import DrawerLink from "../navigate/nav/DrawerLink";
+import { FC } from "react"
+import { Outlet, RouteObject } from "react-router-dom"
+import DrawerNav from "../navigate/nav/DrawerNav"
+import DrawerSideContent from "../navigate/menu/side/DrawerSideContent"
+import DrawerLink from "../navigate/nav/DrawerLink"
+import { IndexRouter } from "../../router"
 
 const DrawerLayout: FC = () => {
   return (
@@ -21,18 +22,28 @@ const DrawerLayout: FC = () => {
           className="drawer-overlay"
         />
         <DrawerSideContent>
-          <DrawerLink to="/">
-            <i className="bx bx-home-alt" />
-            Home
-          </DrawerLink>
-          <DrawerLink to="/project">
-            <i className="bx bx-briefcase" />
-            Project
-          </DrawerLink>
+          {IndexRouter.map((fr: RouteObject, fi) =>
+            !fr.children?.length ? (
+              <DrawerLink to={fr.path as string} key={fi}>
+                {fr.icon}
+                {fr.name}
+              </DrawerLink>
+            ) : (
+              fr.children.map((sr, si) => (
+                <DrawerLink
+                  to={sr.index ? (fr.path as string) : (sr.path as string)}
+                  key={si}
+                >
+                  {sr.icon}
+                  {sr.name}
+                </DrawerLink>
+              ))
+            )
+          )}
         </DrawerSideContent>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default DrawerLayout;
+export default DrawerLayout

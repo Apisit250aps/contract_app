@@ -3,7 +3,7 @@ import Index from "../pages/Index"
 import LoginPage from "../pages/auth/LoginPage"
 import RegisterPage from "../pages/auth/RegisterPage"
 import ProjectPage from "../pages/projects/ProjectPage"
-import EmployeePage from "../pages/employee/EmployeePage"
+// import EmployeePage from "../pages/employee/EmployeePage"
 import DrawerLayout from "../components/layouts/DrawerLayout"
 import { ReactNode } from "react"
 
@@ -22,23 +22,20 @@ declare module "react-router-dom" {
 export const IndexRouter: RouteObject[] = [
   {
     path: "/",
-    name: "home",
+    name: "index",
     element: <DrawerLayout />,
     children: [
       {
-        path: "/",
+        index: true,
         element: <Index />,
-        name: "index"
+        name: "home",
+        icon: <i className="bx bx-home-alt" />
       },
       {
         path: "/project",
         element: <ProjectPage />,
-        name: "project"
-      },
-      {
-        path: "/employee",
-        element: <EmployeePage />,
-        name: "employee"
+        name: "project",
+        icon: <i className='bx bx-briefcase'></i>
       }
     ]
   }
