@@ -1,36 +1,45 @@
 import { FC, useEffect, useState } from "react"
 import {
-  getProject,
+  getProjectService,
   IProject,
   ProjectResponse
 } from "../../../services/project.service"
+import Modal from "../../modals/Modal"
+import ProjectForm from "../../forms/forms/ProjectForm"
 
 const ProjectRenderTable: FC = () => {
+  const limitList: number[] = [10, 25, 50, 100]
   const [data, setData] = useState<IProject[]>([])
   const [loading, setLoading] = useState(true)
 
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
-  const [limit, setLimit] = useState<number>(25)
+  const [limit, setLimit] = useState<number>(limitList[0])
+
+  const [project_name, setProjectName] = useState("")
+  const [start_date, setStartDate] = useState<Date | undefined>(undefined)
+  const [end_date, setEndDate] = useState<Date | undefined>(undefined)
+  const [status, setStatus] = useState("")
+  const [budget, setBudget] = useState<number | undefined>(undefined)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true)
-        await getProject({ limit: limit, page: currentPage }).then((response) => {
-          const body = response.data as ProjectResponse
-          setCurrentPage(body.currentPage)
-          setTotalPages(body.totalPages)
-          setData(body.projects as IProject[])
-        })
+        await getProjectService({ limit: limit, page: currentPage }).then(
+          (response) => {
+            const body = response.data as ProjectResponse
+            setCurrentPage(body.currentPage)
+            setTotalPages(body.totalPages)
+            setData(body.projects as IProject[])
+          }
+        )
       } finally {
         setLoading(false)
       }
     }
-
     fetchData()
   }, [currentPage, limit]) // อัปเดตข้อมูลเมื่อ currentPage เปลี่ยน
-
   const handlePageChange = (page: number) => {
     if (page > 0 && page <= totalPages) {
       setCurrentPage(page)
@@ -38,45 +47,75 @@ const ProjectRenderTable: FC = () => {
   }
   return (
     <>
-      <div className="card bg-base-100 p-3 shadow-lg rounded-2xl">
+      <div className="card bg-base-100 p-3 shadow-lg rounded-2xl h-[90vh] flex flex-col">
         <div className="card-title flex flex-row justify-between">
-          <div className="">
+          <div>
             <h1>Projects</h1>
           </div>
-          <div className="card-actions flex flex-row justify-end">
+          <div className=" flex flex-row justify-end">
             <select
-              className="select select-bordered w-full max-w-xs"
+              className="select bg-base-200 w-full max-w-xs"
               value={limit}
               onChange={(e) => setLimit(Number(e.target.value))}
             >
-              <option value={25}>
-                25
-              </option>
-              <option value={50}>50</option>
-              <option value={100}>100</option>
+              {limitList.map((value, index) => (
+                <option key={index} value={value}>
+                  {value}
+                </option>
+              ))}
             </select>
+            <div className="dropdown dropdown-end">
+              <div tabIndex={1} role="button" className="btn ms-1">
+                <i className="bx bx-dots-vertical-rounded"></i>
+              </div>
+              <ul
+                tabIndex={1}
+                className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
+              >
+                <li>
+                  <label htmlFor="create-project" className="btn btn-sm">
+                    <i className="bx bx-briefcase-alt-2"></i>
+                    New
+                  </label>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-        <div className="card-body">
+        <div className="card-body bg-base-200 rounded-2xl my-3 flex-grow overflow-auto shadow-inner">
           {!loading ? (
-            <div className="overflow-x-auto">
-              <table className="table">
-                <thead></thead>
+            <div className="h-full overflow-x-auto">
+              <table className="table ">
+                <thead>
+                  <tr className="bg-base-200">
+                    <td>#</td>
+                    {data.length > 0 &&
+                      Object.keys(data[0]).map((col, index) => (
+                        <th key={index}>{col}</th>
+                      ))}
+                  </tr>
+                </thead>
                 <tbody>
-                  {data.map((value: IProject, index) => (
-                    <tr key={index}>{value.project_name}</tr>
+                  {data.map((project, index) => (
+                    <tr key={index} className="hover:bg-white">
+                      <td>{index + limit * (currentPage - 1) + 1}</td>
+                      {Object.values(project).map((col, colIndex) => (
+                        <td key={colIndex} className="hover:bg-base-300">
+                          {col}
+                        </td>
+                      ))}
+                    </tr>
                   ))}
                 </tbody>
-                <tfoot></tfoot>
               </table>
             </div>
           ) : (
-            <div className="flex justify-center">
+            <div className="flex justify-center items-center h-full">
               <span className="loading loading-dots loading-lg"></span>
             </div>
           )}
         </div>
-        <div className="card-actions">
+        <div className="card-actions mt-auto">
           <div className="join">
             <button
               className="join-item btn"
@@ -96,6 +135,21 @@ const ProjectRenderTable: FC = () => {
           </div>
         </div>
       </div>
+      <Modal title="New Project" id={"create-project"}>
+        <ProjectForm
+          projectName={project_name}
+          setProjectName={setProjectName}
+          startDate={start_date}
+          setStartDate={setStartDate}
+          endDate={end_date}
+          setEndDate={setEndDate}
+          status={status}
+          setStatus={setStatus}
+          budget={budget}
+          setBudget={setBudget}
+          handleSubmit={() => {}}
+        />
+      </Modal>
     </>
   )
 }
