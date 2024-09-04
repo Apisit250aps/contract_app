@@ -77,6 +77,9 @@ const ProjectForm: FC<IProjectForm> = ({
           value={budget?.toString() || ""}
         />
       )}
+      <button type="submit" className="btn btn-primary">
+        Create
+      </button>
     </form>
   );
 };
