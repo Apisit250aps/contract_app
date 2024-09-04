@@ -1,9 +1,9 @@
 import { FC } from "react"
-import ProjectRenderTable from "../../components/base/projects/ProjectRenderTable"
+import ProjectManage from "../../components/base/projects/ProjectManage"
 const ProjectPage: FC = () => {
   return (
     <>
-      <ProjectRenderTable />
+      <ProjectManage />
     </>
   )
 }

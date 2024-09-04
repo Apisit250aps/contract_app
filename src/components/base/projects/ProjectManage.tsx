@@ -6,8 +6,9 @@ import {
 } from "../../../services/project.service"
 import Modal from "../../modals/Modal"
 import ProjectForm from "../../forms/forms/ProjectForm"
-
-const ProjectRenderTable: FC = () => {
+import ProjectTable from "./ProjectTable"
+//
+const ProjectManage: FC = () => {
   const limitList: number[] = [10, 25, 50, 100]
   const [data, setData] = useState<IProject[]>([])
   const [loading, setLoading] = useState(true)
@@ -84,31 +85,13 @@ const ProjectRenderTable: FC = () => {
         </div>
         <div className="card-body bg-base-200 rounded-2xl my-3 flex-grow overflow-auto shadow-inner">
           {!loading ? (
-            <div className="h-full overflow-x-auto">
-              <table className="table ">
-                <thead>
-                  <tr className="bg-base-200">
-                    <td>#</td>
-                    {data.length > 0 &&
-                      Object.keys(data[0]).map((col, index) => (
-                        <th key={index}>{col}</th>
-                      ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.map((project, index) => (
-                    <tr key={index} className="hover:bg-white">
-                      <td>{index + limit * (currentPage - 1) + 1}</td>
-                      {Object.values(project).map((col, colIndex) => (
-                        <td key={colIndex} className="hover:bg-base-300">
-                          {col}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <ProjectTable
+              data={data}
+              limit={limit}
+              currentPage={currentPage}
+              cols={["project_name", "status", "budget"]}
+              colsMap={["ชื่อโครงการ", "สถานะ", "งบประมาณ"]}
+            />
           ) : (
             <div className="flex justify-center items-center h-full">
               <span className="loading loading-dots loading-lg"></span>
@@ -154,4 +137,4 @@ const ProjectRenderTable: FC = () => {
   )
 }
 
-export default ProjectRenderTable
+export default ProjectManage

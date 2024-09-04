@@ -1,9 +1,9 @@
 import axios, { AxiosError } from "axios"
-import { getProject, IProject } from "../../services/project.service"
+import { getProjectService, IProject } from "../../services/project.service"
 
 export const ProjectLoader = async () => {
   try {
-    const response = await getProject({})
+    const response = await getProjectService({})
 
     if (response.status === 200) {
       return response.data as IProject
