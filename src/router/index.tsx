@@ -36,6 +36,12 @@ export const IndexRouter: RouteObject[] = [
         element: <ProjectPage />,
         name: "project",
         icon: <i className='bx bx-briefcase'></i>
+      },
+      {
+        path:"/employee",
+        element:<>Hello Employee</>,
+        name:"employee",
+        icon:<i className='bx bx-hard-hat'></i>
       }
     ]
   }
