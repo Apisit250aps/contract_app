@@ -89,8 +89,20 @@ const ProjectManage: FC = () => {
               data={data}
               limit={limit}
               currentPage={currentPage}
-              cols={["project_name", "status", "budget"]}
-              colsMap={["ชื่อโครงการ", "สถานะ", "งบประมาณ"]}
+              cols={[
+                "project_name",
+                "status",
+                "start_date",
+                "end_date",
+                "budget"
+              ]}
+              colsMap={[
+                "ชื่อโครงการ",
+                "สถานะ",
+                "วันเริ่ม",
+                "วันสิ้นสุด",
+                "งบประมาณ"
+              ]}
             />
           ) : (
             <div className="flex justify-center items-center h-full">
