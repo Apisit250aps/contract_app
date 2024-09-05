@@ -4,7 +4,11 @@ import { useNavigate } from "react-router-dom"
 import Swal from "sweetalert2"
 import UsernameInput from "../inputs/Username"
 import PasswordInput from "../inputs/PasswordInput"
-import { ILoginService, LoginService } from "../../../services/auth.service"
+import {
+  ILoginService,
+  LoginService,
+  setToken
+} from "../../../services/auth.service"
 
 interface FormErrors {
   username?: string
@@ -64,6 +68,7 @@ const LoginForm: FC = () => {
     try {
       const response = await LoginService(credentials)
       if (response.status === 200 && response.data.token) {
+        setToken(response.data.token)
         Swal.fire({
           title: "Success!",
           text: "You have successfully logged in.",

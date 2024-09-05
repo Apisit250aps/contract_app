@@ -1,6 +1,7 @@
 import axios from "axios"
 import Swal from "sweetalert2"
-import { JWT_TOKEN, STORE_TOKEN } from "../middleware/auth.middleware";
+import { JWT_TOKEN } from "../middleware/auth.middleware";
+import { removeToken } from "./auth.service";
 // Get the token from localStorage or any other storage mechanism you're using
 
 //
@@ -13,10 +14,10 @@ const handleSessionExpiration = () => {
     allowOutsideClick: false // Prevent closing by clicking outside the alert
   }).then(() => {
     // Clear the token and other session data
-    localStorage.removeItem(STORE_TOKEN)
+    removeToken()
 
     // Redirect to the login page
-    window.location.href = "/auth/login"
+    location.href = "/auth/login"
   })
 }
 const apiClient = axios.create({
@@ -33,8 +34,9 @@ apiClient.interceptors.response.use(
     return response
   },
   (error) => {
-    if (error.response?.status === 401) {
+    if (error.response?.status === 403||error.response?.status === 401||error.response?.status === 404) {
       handleSessionExpiration()
+      location.replace("/auth/login")
     }
     return Promise.reject(error)
   }

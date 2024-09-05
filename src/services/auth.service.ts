@@ -1,5 +1,6 @@
 import apiClient from "."
 import { AxiosResponse, AxiosError } from "axios"
+import { STORE_TOKEN } from "../middleware/auth.middleware";
 
 export interface IRegisterService {
   username: string
@@ -38,3 +39,17 @@ export const LoginService = async (
       .then((response: AxiosResponse) => resolve(response))
       .catch((error: AxiosError) => reject(error))
   })
+
+export const setToken = (token: string) => {
+  localStorage.setItem(STORE_TOKEN, token)
+}
+
+// ฟังก์ชันสำหรับดึง Token จาก localStorage
+export const getToken = (): string | null => {
+  return localStorage.getItem(STORE_TOKEN)
+}
+
+// ฟังก์ชันสำหรับลบ Token ออกจาก localStorage
+export const removeToken = () => {
+  localStorage.removeItem(STORE_TOKEN)
+}

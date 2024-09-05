@@ -6,6 +6,7 @@ import ProjectPage from "../pages/projects/ProjectPage"
 // import EmployeePage from "../pages/employee/EmployeePage"
 import DrawerLayout from "../components/layouts/DrawerLayout"
 import { ReactNode } from "react"
+import EmployeePage from "../pages/employee/EmployeePage"
 
 // Extend NonIndexRouteObject and IndexRouteObject to include 'name' property
 declare module "react-router-dom" {
@@ -28,20 +29,20 @@ export const IndexRouter: RouteObject[] = [
       {
         index: true,
         element: <Index />,
-        name: "home",
+        name: "Home",
         icon: <i className="bx bx-home-alt" />
       },
       {
         path: "/project",
         element: <ProjectPage />,
-        name: "project",
-        icon: <i className='bx bx-briefcase'></i>
+        name: "Project",
+        icon: <i className="bx bx-briefcase"></i>
       },
       {
-        path:"/employee",
-        element:<>Hello Employee</>,
-        name:"employee",
-        icon:<i className='bx bx-hard-hat'></i>
+        path: "/employee",
+        element: <EmployeePage />,
+        name: "Employee",
+        icon: <i className="bx bx-hard-hat"></i>
       }
     ]
   }

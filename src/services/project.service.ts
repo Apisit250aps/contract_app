@@ -24,6 +24,7 @@ export const getProjectService = async ({
   page = 1
 }): Promise<AxiosResponse> => {
   return new Promise((resolve, reject) => [
+    
     apiClient({
       method: "get",
       url: "/project/get",
