@@ -53,11 +53,7 @@ const EmployeeTable: FC<EmployeeTableProp> = ({
         </thead>
         <tbody>
           {tableData.map((employee, index) => (
-            <tr
-              key={employee._id || index}
-              className="hover:bg-white"
-              id={employee._id}
-            >
+            <tr key={employee._id || index} className="hover:bg-white">
               <td>{index + limit * (currentPage - 1) + 1}</td>
               {columns.map((col, colIndex) => (
                 <td key={colIndex} className="hover:bg-base-300">

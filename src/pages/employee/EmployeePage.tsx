@@ -91,7 +91,12 @@ const EmployeePage: FC = () => {
         </div>
         <div className="card-body">
           {!loading ? (
-            <EmployeeTable data={data} limit={limit} currentPage={currentPage} />
+            <EmployeeTable data={data} limit={limit} currentPage={currentPage} colsMap={{
+              first_name:"First name",
+              last_name:"Last name",
+              phone_number:"Phone",
+              position:"Position"
+            }}/>
           ) : (
             <div className="flex justify-center items-center h-full">
               <span className="loading loading-dots loading-lg"></span>
