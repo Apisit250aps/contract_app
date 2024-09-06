@@ -21,6 +21,13 @@ export interface IEmployee {
   __v?: number
 }
 
+export interface EmployeesData {
+  employees: IEmployee[];
+  currentPage: number;
+  totalPages: number;
+  totalEmployees: number;
+}
+
 export const getEmployeeService = async ({
   limit = 10,
   page = 1,
@@ -28,8 +35,8 @@ export const getEmployeeService = async ({
 }): Promise<AxiosResponse> => {
   try {
     const response = await apiClient({
-      method: "post",
-      url: "/auth/register",
+      method: "get",
+      url: "/employee/all",
       params: { page, limit, filters }
     })
     return response
@@ -47,7 +54,7 @@ export const createEmployeeService = async (
   try {
     const response = await apiClient({
       method: "post",
-      url: "/employees",
+      url: "/employees/create",
       data: data
     })
     return response
