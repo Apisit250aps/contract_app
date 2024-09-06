@@ -61,7 +61,7 @@ const EmployeeTable: FC<EmployeeTableProp> = ({
                 </td>
               ))}
               <td className="text-end">
-                <button type="button" className="btn btn-ghost">
+                <button type="button" className="btn btn-ghost" onClick={()=>console.log(employee._id)}>
                   <i className="bx bx-dots-vertical-rounded"></i>
                 </button>
               </td>

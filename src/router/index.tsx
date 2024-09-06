@@ -27,7 +27,7 @@ export const IndexRouter: RouteObject[] = [
     element: <DrawerLayout />,
     children: [
       {
-        index: true,
+        path: "/",
         element: <Index />,
         name: "Home",
         icon: <i className="bx bx-home-alt" />
@@ -42,7 +42,15 @@ export const IndexRouter: RouteObject[] = [
         path: "/employee",
         element: <EmployeePage />,
         name: "Employee",
-        icon: <i className="bx bx-hard-hat"></i>
+        icon: <i className="bx bx-hard-hat"></i>,
+        children: [
+          {
+            path: "/employee/all",
+            element: <EmployeePage />,
+            name: "Employee",
+            icon: <i className="bx bx-hard-hat"></i>
+          }
+        ]
       }
     ]
   }
