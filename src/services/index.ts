@@ -1,7 +1,7 @@
 import axios from "axios"
 import Swal from "sweetalert2"
 import { JWT_TOKEN } from "../middleware/auth.middleware";
-import { removeToken } from "./auth.service";
+import { delToken } from "./auth.service";
 // Get the token from localStorage or any other storage mechanism you're using
 
 //
@@ -14,7 +14,7 @@ const handleSessionExpiration = () => {
     allowOutsideClick: false // Prevent closing by clicking outside the alert
   }).then(() => {
     // Clear the token and other session data
-    removeToken()
+    delToken()
 
     // Redirect to the login page
     location.href = "/auth/login"
