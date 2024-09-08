@@ -14,7 +14,7 @@ const DrawerNav: FC = () => {
         <div className="flex-none">
           <label
             htmlFor="drawer-layout"
-            className="btn btn-ghost text-black drawer-button lg:hidden"
+            className="btn btn-ghost text-black drawer-button"
           >
             <i className="bx bx-menu-alt-left"></i>
           </label>
