@@ -5,7 +5,7 @@ import RegisterPage from "../pages/auth/RegisterPage"
 import { ReactNode } from "react"
 import DrawerLayout from "../components/layouts/DrawerLayout"
 import JobPage from "../pages/job/JobPage"
-import AddJobPage from "../pages/job/AddJobPage"
+import JobCreatePage from "../pages/job/JobCreatePage"
 import WorkerListPage from "../pages/worker/WorkerListPage"
 import WorkerCreatePage from "../pages/worker/WorkerCreatePage"
 
@@ -45,7 +45,7 @@ export const contentRouter: RouteObject[] = [
           {
             path: "/jobs/create",
             name: "New Job",
-            element: <AddJobPage />,
+            element: <JobCreatePage />,
             icon: <i className="bx bx-book-add"></i>
           }
         ]

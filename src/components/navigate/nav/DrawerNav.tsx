@@ -32,7 +32,7 @@ const DrawerNav: FC = () => {
               className="dropdown-content menu bg-base-100 rounded-box z-[1] w-auto p-2 shadow"
             >
               <li>
-                <a className="text-red-600 font-semibold" onClick={logout}>
+                <a className="text-red-600 bg-base-100 hover:text-base-100 hover:bg-red-600 outline outline-1 font-semibold" onClick={logout}>
                   <i className="bx bx-power-off"></i>
                   Logout
                 </a>

@@ -1,16 +1,17 @@
-import React, { FC, useCallback, useEffect, useState } from "react";
-import Swal from "sweetalert2";
-import workerService, { IWorker } from "../../../services/worker.service";
-import { AxiosResponse } from "axios";
+import { FC, useCallback, useEffect, useState } from "react"
+import Swal from "sweetalert2"
+import workerService, { IWorker } from "../../../services/worker.service"
+import { AxiosResponse } from "axios"
 
 interface WorkerDataProps {
-  limit?: number;
-  page?: number;
-  currentPage?: number;
-  totalPages?: number;
-  totalItems?: number;
-  onPaginationChange: (currentPage: number, totalPages: number, totalItems: number) => void;
-  onSelectionChange?: (selectedWorkers: IWorker[]) => void;
+  limit?: number
+  page?: number
+  onPaginationChange: (
+    currentPage: number,
+    totalPages: number,
+    totalItems: number
+  ) => void
+  onSelectionChange?: (selectedWorkers: IWorker[]) => void
 }
 
 const WorkerData: FC<WorkerDataProps> = ({
@@ -19,75 +20,63 @@ const WorkerData: FC<WorkerDataProps> = ({
   onPaginationChange,
   onSelectionChange
 }) => {
-  const [workerData, setWorkerData] = useState<IWorker[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedWorkers, setSelectedWorkers] = useState<Set<string>>(new Set());
+  const [workerData, setWorkerData] = useState<IWorker[]>([])
+  const [loading, setLoading] = useState(true)
+  const [selectedWorkers, setSelectedWorkers] = useState<IWorker[]>([])
 
   const fetchData = useCallback(async () => {
     try {
-      setLoading(true);
+      setLoading(true)
       const response = (await workerService.getAllWorker({
         limit,
         page
-      })) as AxiosResponse;
-      setWorkerData(response.data.data);
+      })) as AxiosResponse
+      setWorkerData(response.data.data)
       onPaginationChange(
         response.data.currentPage,
         response.data.totalPages,
         response.data.totalItems
-      );
+      )
     } catch (error) {
-      console.error("Error fetching workers:", error);
+      console.error("Error fetching workers:", error)
       Swal.fire({
         title: "Error",
         text: "Failed to fetch workers. Please try again.",
         icon: "error"
-      });
+      })
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  }, [limit, page, onPaginationChange]);
+  }, [limit, page, onPaginationChange])
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    fetchData()
+  }, [fetchData])
 
-  const handleCheckboxChange = useCallback((workerId: string) => {
-    setSelectedWorkers((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(workerId)) {
-        newSet.delete(workerId);
-      } else {
-        newSet.add(workerId);
-      }
-      return newSet;
-    });
-  }, []);
+  const handleWorkerSelection = useCallback(
+    (worker: IWorker, isSelected: boolean) => {
+      setSelectedWorkers((prevSelected) => {
+        const newSelected = isSelected
+          ? [...prevSelected, worker]
+          : prevSelected.filter((e) => e._id !== worker._id)
+        return newSelected
+      })
+    },
+    []
+  )
 
   useEffect(() => {
     if (onSelectionChange) {
-      const selectedWorkersList = workerData.filter((worker) =>
-        selectedWorkers.has(worker._id as string)
-      );
-      onSelectionChange(selectedWorkersList);
+      onSelectionChange(selectedWorkers)
     }
-  }, [selectedWorkers, workerData, onSelectionChange]);
-
-  const handleSelectAll = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      if (event.target.checked) {
-        setSelectedWorkers(
-          new Set(workerData.map((worker) => worker._id as string))
-        );
-      } else {
-        setSelectedWorkers(new Set());
-      }
-    },
-    [workerData]
-  );
+  }, [selectedWorkers, onSelectionChange])
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-40">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+      </div>
+    )
   }
 
   return (
@@ -95,27 +84,25 @@ const WorkerData: FC<WorkerDataProps> = ({
       <table className="table w-full">
         <thead>
           <tr>
-            <th>
-              <input
-                type="checkbox"
-                className="checkbox"
-                onChange={handleSelectAll}
-                checked={selectedWorkers.size === workerData.length}
-              />
-            </th>
+            <th>#</th>
             <th>Name</th>
             <th>Contact Info</th>
           </tr>
         </thead>
         <tbody>
           {workerData.map((worker, index) => (
-            <tr key={worker._id} className={index % 2 === 0 ? "" : "hover"}>
+            <tr
+              key={index}
+              className={index % 2 === 0 ? "bg-gray-50" : "hover:bg-gray-100"}
+            >
               <td>
                 <input
-                  className="checkbox"
                   type="checkbox"
-                  checked={selectedWorkers.has(worker._id as string)}
-                  onChange={() => handleCheckboxChange(worker._id as string)}
+                  checked={selectedWorkers.some((e) => e._id === worker._id)}
+                  onChange={(e) =>
+                    handleWorkerSelection(worker, e.target.checked)
+                  }
+                  className="checkbox"
                 />
               </td>
               <td>{worker.name}</td>
@@ -124,8 +111,11 @@ const WorkerData: FC<WorkerDataProps> = ({
           ))}
         </tbody>
       </table>
+      {workerData.length === 0 && !loading && (
+        <div className="text-center py-4">No workers found</div>
+      )}
     </div>
-  );
-};
+  )
+}
 
-export default WorkerData;
+export default WorkerData
