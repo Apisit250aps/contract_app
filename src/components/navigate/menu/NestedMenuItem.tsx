@@ -21,12 +21,18 @@ const MenuItem: React.FC<{ route: RouteObject }> = ({ route }) => {
           </ul>
         </details>
       ) : (
-        <a
-          href={route.path}
-          className={location.pathname == route.path ? "active" : ""}
-        >
-          {route.icon} {route.name}
-        </a>
+        <>
+          {!route.visible ? (
+            <a
+              href={route.path}
+              className={location.pathname == route.path ? "active" : ""}
+            >
+              {route.icon} {}
+            </a>
+          ) : (
+            <></>
+          )}
+        </>
       )}
     </li>
   )

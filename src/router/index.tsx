@@ -8,15 +8,18 @@ import JobListPage from "../pages/job/JobListPage"
 import JobCreatePage from "../pages/job/JobCreatePage"
 import WorkerListPage from "../pages/worker/WorkerListPage"
 import WorkerCreatePage from "../pages/worker/WorkerCreatePage"
+import JobDetailPage from "../pages/job/JobDetailPage"
 
 declare module "react-router-dom" {
   interface NonIndexRouteObject {
     name?: string
     icon?: ReactNode | null
+    visible?: boolean
   }
   interface IndexRouteObject {
     name?: string
     icon?: ReactNode | null
+    visible?: boolean
   }
 }
 
@@ -37,7 +40,7 @@ export const contentRouter: RouteObject[] = [
         icon: <i className="bx bx-briefcase"></i>,
         children: [
           {
-            path: "/jobs",
+            path: "/jobs/all",
             name: "Job list",
             element: <JobListPage />,
             icon: <i className="bx bx-book"></i>
@@ -47,6 +50,11 @@ export const contentRouter: RouteObject[] = [
             name: "New Job",
             element: <JobCreatePage />,
             icon: <i className="bx bx-book-add"></i>
+          },
+          {
+            path: "/jobs/:jobId",
+            element: <JobDetailPage />,
+            visible: true
           }
         ]
       },
