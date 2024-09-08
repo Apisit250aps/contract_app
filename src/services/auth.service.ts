@@ -1,6 +1,7 @@
+
 import apiClient from "."
 import { AxiosResponse, AxiosError } from "axios"
-const tokenStore = "contracting_auth_token"
+export const tokenStore = "contracting_auth_token"
 export interface IAuthCredentials {
   username: string
   password: string
@@ -12,7 +13,7 @@ export interface IAuthResponse {
 }
 
 export const getToken = (): string => {
-  return localStorage.getItem(tokenStore) as string
+  return localStorage.getItem(tokenStore) as string || ""
 }
 
 export const delToken = (): void => {

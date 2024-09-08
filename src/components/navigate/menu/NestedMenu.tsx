@@ -13,7 +13,7 @@ const MenuItem: React.FC<{
   return (
     <li>
       {hasChildren ? (
-        <details
+        <details className="mb-1"
           open={
             location.pathname.split("/")[1] ==
             (route.path as string).split("/")[1]

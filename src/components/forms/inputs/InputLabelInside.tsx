@@ -5,6 +5,7 @@ interface TextInputProp {
   type?: string
   placeholder?: string
   value: string
+  name?: string
   set: (value: ChangeEvent<HTMLInputElement>) => void
 }
 
@@ -13,14 +14,16 @@ const InputLabelInside: FC<TextInputProp> = ({
   type = "text",
   placeholder,
   value,
+  name = "",
   set
 }) => {
   return (
-    <label className="input input-bordered mb-2 flex items-center gap-2">
+    <label className="input mb-2 flex items-center gap-2 bg-base-200 ">
       {label}
       <input
         type={type}
         className="grow"
+        name={name}
         placeholder={placeholder}
         value={value}
         onChange={set}
