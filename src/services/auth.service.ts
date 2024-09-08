@@ -1,40 +1,54 @@
 import apiClient from "."
 import { AxiosResponse, AxiosError } from "axios"
-
-export interface IRegisterService {
-  username: string
-  email: string
-  password: string
-}
-
-export interface ILoginService {
+const tokenStore = "contracting_auth_token"
+export interface IAuthCredentials {
   username: string
   password: string
+  _id?: string
 }
 
-export const RegisterService = (
-  credentials: IRegisterService
-): Promise<AxiosResponse> => {
-  return new Promise((resolve, reject) => {
-    apiClient({
-      method: "post",
-      url: "/auth/register",
-      data: credentials
-    })
-      .then((response: AxiosResponse) => resolve(response))
-      .catch((error: AxiosError<{ response: AxiosResponse }>) => reject(error))
-  })
+export interface IAuthResponse {
+  token: string
 }
 
-export const LoginService = async (
-  credentials: ILoginService
-): Promise<AxiosResponse> =>
-  new Promise((resolve, reject) => {
-    apiClient({
-      method: "post",
-      url: "/auth/login",
-      data: credentials
-    })
-      .then((response: AxiosResponse) => resolve(response))
-      .catch((error: AxiosError) => reject(error))
-  })
+export const getToken = (): string => {
+  return localStorage.getItem(tokenStore) as string
+}
+
+export const delToken = (): void => {
+  localStorage.removeItem(tokenStore)
+  return
+}
+
+export const setToken = (token: string): void => {
+  localStorage.setItem(tokenStore, token)
+  return
+}
+
+export default {
+  register: async (
+    credentials: IAuthCredentials
+  ): Promise<IAuthCredentials> => {
+    try {
+      const response: AxiosResponse<IAuthCredentials> = await apiClient.post(
+        "/auth/register",
+        credentials
+      )
+      return response.data
+    } catch (error) {
+      throw error as AxiosError
+    }
+  },
+
+  login: async (credentials: IAuthCredentials): Promise<IAuthResponse> => {
+    try {
+      const response: AxiosResponse<IAuthResponse> = await apiClient.post(
+        "/auth/login",
+        credentials
+      )
+      return response.data
+    } catch (error) {
+      throw error as AxiosError
+    }
+  }
+}

@@ -1,6 +1,13 @@
 import { FC } from "react"
-
+import { useNavigate } from "react-router-dom"
+import { delToken } from "../../../services/auth.service"
 const DrawerNav: FC = () => {
+  const navigate = useNavigate()
+  const logout = () => {
+    delToken()
+    navigate("/auth/login")
+  }
+
   return (
     <>
       <div className="navbar bg-base-100 rounded-2xl shadow-lg">
@@ -16,21 +23,22 @@ const DrawerNav: FC = () => {
           <a className="btn btn-ghost text-xl">daisyUI</a>
         </div>
         <div className="flex-none">
-          <button className="btn btn-square btn-ghost">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              className="inline-block h-5 w-5 stroke-current"
+          <div className="dropdown dropdown-end">
+            <div tabIndex={0} role="button" className="btn m-1 btn-ghost">
+              <i className="bx bx-dots-vertical-rounded"></i>
+            </div>
+            <ul
+              tabIndex={0}
+              className="dropdown-content menu bg-base-100 rounded-box z-[1] w-auto p-2 shadow"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
-              ></path>
-            </svg>
-          </button>
+              <li>
+                <a className="text-red-600 font-semibold" onClick={logout}>
+                  <i className="bx bx-power-off"></i>
+                  Logout
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </>

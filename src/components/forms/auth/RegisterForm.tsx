@@ -1,142 +1,95 @@
-import React, { FC, useState } from "react"
-import UsernameInput from "../inputs/Username"
-import PasswordInput from "../inputs/PasswordInput"
-import EmailInput from "../inputs/EmailInput"
-import {
-  IRegisterService,
-  RegisterService
-} from "../../../services/auth.service"
-import Swal from "sweetalert2"
-import axios, { AxiosError } from "axios"
+import React, { FC, useState, useCallback } from "react";
+import UsernameInput from "../inputs/Username";
+import PasswordInput from "../inputs/PasswordInput";
+import Swal from "sweetalert2";
+import authService, { IAuthCredentials } from "../../../services/auth.service";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+interface FormData {
+  username: string;
+  password: string;
+}
 
 interface FormErrors {
-  username?: string
-  email?: string
-  password?: string
+  username?: string;
+  password?: string;
 }
 
 const RegisterForm: FC = () => {
-  const [username, setUsername] = useState<string>("")
-  const [password, setPassword] = useState<string>("")
-  const [email, setEmail] = useState<string>("")
-  const [errors, setErrors] = useState<FormErrors>({})
+  const [formData, setFormData] = useState<FormData>({ username: "", password: "" });
+  const [errors, setErrors] = useState<FormErrors>({});
+  const navigate = useNavigate();
 
-  const validateField = (name: string, value: string): string | undefined => {
+  const validateField = useCallback((name: string, value: string): string | undefined => {
     switch (name) {
       case "username":
-        return value.length < 3
-          ? "Username must be at least 3 characters long"
-          : undefined
-      case "email":
-        return !/\S+@\S+\.\S+/.test(value) ? "Email is invalid" : undefined
+        return value.length < 3 ? "Username must be at least 3 characters long" : undefined;
       case "password":
-        return value.length < 8
-          ? "Password must be at least 8 characters long"
-          : undefined
+        return value.length < 8 ? "Password must be at least 8 characters long" : undefined;
       default:
-        return undefined
+        return undefined;
     }
-  }
+  }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    if (name === "username") setUsername(value)
-    if (name === "email") setEmail(value)
-    if (name === "password") setPassword(value)
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    const error = validateField(name, value);
+    setErrors(prev => ({ ...prev, [name]: error }));
+  }, [validateField]);
 
-    const error = validateField(name, value)
-    setErrors((prev) => ({ ...prev, [name]: error }))
-  }
-
-  const validateForm = (): boolean => {
+  const validateForm = useCallback((): boolean => {
     const newErrors: FormErrors = {
-      username: validateField("username", username),
-      email: validateField("email", email),
-      password: validateField("password", password)
-    }
-    setErrors(newErrors)
-    return !Object.values(newErrors).some((error) => error !== undefined)
-  }
+      username: validateField("username", formData.username),
+      password: validateField("password", formData.password)
+    };
+    setErrors(newErrors);
+    return !Object.values(newErrors).some(error => error !== undefined);
+  }, [formData, validateField]);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+  const handleSubmit = useCallback(async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     if (!validateForm()) {
       Swal.fire({
         title: "Validation Error",
         text: "Please correct the errors in the form",
         icon: "error",
         confirmButtonText: "OK"
-      })
-      return
+      });
+      return;
     }
-    const credentials: IRegisterService = { username, email, password }
+
     try {
-      const response = await RegisterService(credentials)
-      if (response.status === 201) {
+      const data = await authService.register(formData as IAuthCredentials);
+      if (data) {
         Swal.fire({
-          title: "Success!",
-          text: "Registration completed successfully.",
-          icon: "success",
-          confirmButtonText: "OK"
-        })
+          text: "Register successfully!",
+          icon: "success"
+        });
+        setTimeout(() => navigate("/auth/login"), 500);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError<{ message: string }>
-        if (axiosError.response) {
-          Swal.fire({
-            title: "Registration Failed",
-            text:
-              axiosError.response.data.message ||
-              "An unexpected error occurred",
-            icon: "error",
-            confirmButtonText: "OK"
-          })
-        } else if (axiosError.request) {
-          // The request was made but no response was received
-          Swal.fire({
-            title: "Network Error",
-            text: "Unable to connect to the server. Please try again later.",
-            icon: "error",
-            confirmButtonText: "OK"
-          })
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          Swal.fire({
-            title: "Error",
-            text: "An unexpected error occurred. Please try again.",
-            icon: "error",
-            confirmButtonText: "OK"
-          })
-        }
-      } else {
-        // Handle non-Axios errors
         Swal.fire({
-          title: "Error",
-          text: "An unexpected error occurred. Please try again.",
-          icon: "error",
-          confirmButtonText: "OK"
-        })
+          text: error.response?.data.message || "An error occurred during registration",
+          icon: "error"
+        });
       }
     }
-  }
+  }, [formData, navigate, validateForm]);
 
   return (
     <div className="card bg-base-100 w-full shrink-0 shadow-2xl">
       <form className="card-body" onSubmit={handleSubmit}>
-        <EmailInput
-          onChange={handleChange}
-          value={email}
-          error={errors.email}
-        />
         <UsernameInput
           onChange={handleChange}
-          value={username}
+          value={formData.username}
           error={errors.username}
         />
         <PasswordInput
           onChange={handleChange}
-          value={password}
+          value={formData.password}
           onToggle={true}
           error={errors.password}
         />
@@ -150,7 +103,7 @@ const RegisterForm: FC = () => {
         </a>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default RegisterForm
+export default RegisterForm;

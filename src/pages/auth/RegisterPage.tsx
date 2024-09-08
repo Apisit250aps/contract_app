@@ -1,5 +1,5 @@
 import { FC } from "react"
-import HeroLayout from "../../layouts/HeroLayout"
+import HeroLayout from "../../components/layouts/HeroLayout"
 import RegisterForm from "../../components/forms/auth/RegisterForm"
 const RegisterPage: FC = () => {
   return (
