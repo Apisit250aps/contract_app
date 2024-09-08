@@ -7,6 +7,18 @@ export interface IWorker {
   contactInfo?: string
 }
 
+export interface queryParams {
+  limit: number
+  page: number
+}
+
+export interface PaginationResult<T> {
+  data: T[]
+  currentPage: number
+  totalPages: number
+  totalItems: number
+}
+
 export default {
   async createWorker(data: IWorker): Promise<AxiosResponse> {
     try {
@@ -21,11 +33,18 @@ export default {
       throw new Error("An unexpected error occurred")
     }
   },
-  async getAllWorker(): Promise<AxiosResponse> {
+  async getAllWorker({
+    limit,
+    page
+  }: queryParams): Promise<AxiosResponse<{ data: PaginationResult<IWorker> }>> {
     try {
       const response = await apiClient({
         method: "get",
-        url: "/worker/all"
+        url: "/worker/all",
+        params: {
+          limit,
+          page
+        }
       })
       return response
     } catch (error) {
