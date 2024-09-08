@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios"
-import apiClient from "."
+import apiClient, { PaginationResult, queryParams } from "."
 
 export interface IJob {
   _id?: string
@@ -24,6 +24,29 @@ export default {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         throw new Error(error.response?.data?.message || "Failed to create job")
+      }
+      throw new Error("An unexpected error occurred")
+    }
+  },
+  async getAllJob({
+    limit,
+    page
+  }: queryParams): Promise<AxiosResponse<{ data: PaginationResult<IJob> }>> {
+    try {
+      const response = await apiClient({
+        method: "get",
+        url: "/job/all",
+        params: {
+          limit,
+          page
+        }
+      })
+      return response
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(
+          error.response?.data?.message || "Failed to create worker"
+        )
       }
       throw new Error("An unexpected error occurred")
     }

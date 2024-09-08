@@ -81,7 +81,7 @@ const WorkerData: FC<WorkerDataProps> = ({
 
   return (
     <div className="overflow-x-auto">
-      <table className="table w-full">
+      <table className="table table-pin-rows table-pin-cols">
         <thead>
           <tr>
             <th>#</th>
@@ -91,10 +91,7 @@ const WorkerData: FC<WorkerDataProps> = ({
         </thead>
         <tbody>
           {workerData.map((worker, index) => (
-            <tr
-              key={index}
-              className={index % 2 === 0 ? "bg-gray-50" : "hover:bg-gray-100"}
-            >
+            <tr key={index}>
               <td>
                 <input
                   type="checkbox"

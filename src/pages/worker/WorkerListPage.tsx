@@ -5,23 +5,17 @@ import { IWorker } from "../../services/worker.service"
 // import { IWorker } from "../../services/worker.service"
 
 const WorkerListPage: FC = () => {
-  const [pagination, setPagination] = useState({
-    limit: 10,
-    page: 1,
-    currentPage: 1,
-    totalPages: 1,
-    totalItems: 0
-  })
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [totalPages, setTotalPages] = useState<number>(1)
+  // const [totalItems, setTotalItems] = useState<number>(1)
+  const [limit, setLimit] = useState<number>(10)
+  const [page, setPage] = useState<number>(1)
   const [selectedWorkers, setSelectedWorkers] = useState<IWorker[]>([])
 
   const handlePaginationChange = useCallback(
-    (currentPage: number, totalPages: number, totalItems: number) => {
-      setPagination((prev) => ({
-        ...prev,
-        currentPage,
-        totalPages,
-        totalItems
-      }))
+    (currentPage: number, totalPages: number) => {
+      setCurrentPage(currentPage)
+      setTotalPages(totalPages)
     },
     []
   )
@@ -31,7 +25,7 @@ const WorkerListPage: FC = () => {
   }, [])
 
   const handlePageChange = useCallback((newPage: number) => {
-    setPagination((prev) => ({ ...prev, page: newPage }))
+    setPage(newPage)
   }, [])
 
   const renderActions = useMemo(() => {
@@ -59,26 +53,35 @@ const WorkerListPage: FC = () => {
 
   return (
     <>
-      <div className="card p-3 bg-base-100 shadow-lg">
-        <div className="card-title flex flex-row justify-between items-center">
-          <div className=" px-3">
+      <div className="card p-3 bg-base-100 shadow-lg h-[90vh]">
+        <div className="card-title flex flex-row justify-between items-center p-3">
+          <div className="">
             <h1>Workers</h1>
           </div>
           <div className="actions flex flex-row items-center justify-end">
+            <select
+              value={limit}
+              className="select w-full max-w-xs bg-base-200"
+              onChange={(e) => setLimit(Number(e.target.value))}
+            >
+              <option value={10}>10</option>
+              <option value={25}>25</option>
+              <option value={50}>50</option>
+            </select>
             <div className="">{renderActions}</div>
           </div>
         </div>
-        <div className="card-body">
+        <div className="card-body overflow-y-auto">
           <WorkerData
-            limit={pagination.limit}
-            page={pagination.page}
+            limit={limit}
+            page={page}
             onPaginationChange={handlePaginationChange}
             onSelectionChange={handleSelectionChange}
           />
         </div>
         <Pagination
-          currentPage={pagination.currentPage}
-          totalPages={pagination.totalPages}
+          currentPage={currentPage}
+          totalPages={totalPages}
           onPageChange={handlePageChange}
         />
       </div>

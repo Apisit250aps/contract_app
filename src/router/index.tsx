@@ -4,7 +4,7 @@ import LoginPage from "../pages/auth/LoginPage"
 import RegisterPage from "../pages/auth/RegisterPage"
 import { ReactNode } from "react"
 import DrawerLayout from "../components/layouts/DrawerLayout"
-import JobPage from "../pages/job/JobPage"
+import JobListPage from "../pages/job/JobListPage"
 import JobCreatePage from "../pages/job/JobCreatePage"
 import WorkerListPage from "../pages/worker/WorkerListPage"
 import WorkerCreatePage from "../pages/worker/WorkerCreatePage"
@@ -39,7 +39,7 @@ export const contentRouter: RouteObject[] = [
           {
             path: "/jobs",
             name: "Job list",
-            element: <JobPage />,
+            element: <JobListPage />,
             icon: <i className="bx bx-book"></i>
           },
           {
