@@ -4,6 +4,19 @@ import { delToken, getToken } from './auth.service';
 
 const API_BASE_URL = 'http://localhost:3000';
 
+export interface queryParams {
+  limit: number
+  page: number
+}
+
+export interface PaginationResult<T> {
+  data: T[]
+  currentPage: number
+  totalPages: number
+  totalItems: number
+}
+
+
 const handleSessionExpiration = () => {
   Swal.fire({
     title: 'Session Expired',

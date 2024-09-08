@@ -3,12 +3,19 @@ import InputLabelInside from "../../components/forms/inputs/InputLabelInside"
 import WorkerData from "../../components/base/worker/WorkerData"
 import Pagination from "../../components/navigate/paginations/Pagination"
 import { IWorker } from "../../services/worker.service"
+import jobService, { IJob } from "../../services/job.service"
+import axios from "axios"
+import Swal from "sweetalert2"
+import { useNavigate } from "react-router-dom";
 
 const JobCreatePage: FC = () => {
   const [title, setTitle] = useState<string>("")
   const [description, setDescription] = useState<string>("")
-  const [startDate, setStartDate] = useState<string>("")
-  const [endDate, setEndDate] = useState<string>("")
+  const [startDate, setStartDate] = useState<Date | string>("")
+  const [endDate, setEndDate] = useState<Date | string>("")
+
+  const navigate = useNavigate()
+
   const [pagination, setPagination] = useState({
     limit: 10,
     page: 1,
@@ -38,6 +45,49 @@ const JobCreatePage: FC = () => {
     setPagination((prev) => ({ ...prev, page: newPage }))
   }, [])
 
+  const handleSubmitJob = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const jobData: IJob = {
+      title,
+      description,
+      startDate,
+      endDate,
+      workers: selectedWorkers.map((worker) => worker._id as string)
+    }
+
+    try {
+      const response = await jobService.createJob(jobData)
+      if (response.status === 201) {
+        Swal.fire({
+          title: "Success",
+          text: "The job has been successfully created.",
+          icon: "success",
+          confirmButtonText: "OK"
+        }).then(()=>navigate("/jobs"))
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorMessage =
+          error.response?.data.message ||
+          "An unexpected error occurred while creating the job."
+        Swal.fire({
+          title: "Error",
+          text: errorMessage,
+          icon: "error",
+          confirmButtonText: "Try Again"
+        })
+      } else {
+        Swal.fire({
+          title: "Error",
+          text: "An unexpected error occurred. Please try again later or contact support if the problem persists.",
+          icon: "error",
+          confirmButtonText: "OK"
+        })
+      }
+      console.error("Error creating job:", error)
+    }
+  }
+
   return (
     <>
       <div className="grid grid-cols-4 gap-3">
@@ -49,7 +99,7 @@ const JobCreatePage: FC = () => {
               </div>
             </div>
             <div className="card-body">
-              <form>
+              <form onSubmit={handleSubmitJob}>
                 <InputLabelInside
                   label="Title"
                   value={title}
@@ -61,17 +111,20 @@ const JobCreatePage: FC = () => {
                   set={(e) => setDescription(e.target.value)}
                 />
                 <InputLabelInside
-                  value={startDate}
+                  value={(startDate || "") as string}
                   type="date"
                   label="Start Date"
                   set={(e) => setStartDate(e.target.value)}
                 />
                 <InputLabelInside
-                  value={endDate}
+                  value={endDate as string}
                   label="End Date"
                   type="date"
                   set={(e) => setEndDate(e.target.value)}
                 />
+                <div className="flex justify-end">
+                  <button className="btn btn-primary">create</button>
+                </div>
               </form>
             </div>
           </div>

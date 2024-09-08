@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios"
-import apiClient from "."
+import apiClient, { PaginationResult, queryParams } from "."
 
 export interface IWorker {
   _id?: string
@@ -7,17 +7,6 @@ export interface IWorker {
   contactInfo?: string
 }
 
-export interface queryParams {
-  limit: number
-  page: number
-}
-
-export interface PaginationResult<T> {
-  data: T[]
-  currentPage: number
-  totalPages: number
-  totalItems: number
-}
 
 export default {
   async createWorker(data: IWorker): Promise<AxiosResponse> {
