@@ -9,10 +9,16 @@ const MenuItem: React.FC<{
     : route.path || ""
   const hasChildren = route.children && route.children.length > 0
   const location = useLocation()
+  
   return (
     <li>
       {hasChildren ? (
-        <details open>
+        <details
+          open={
+            location.pathname.split("/")[1] ==
+            (route.path as string).split("/")[1]
+          }
+        >
           <summary>
             {route.icon} {route.name}
           </summary>
