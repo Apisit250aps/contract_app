@@ -41,7 +41,7 @@ const JobCreatePage: FC = () => {
   return (
     <>
       <div className="grid grid-cols-4 gap-3">
-        <div className="col-span-2">
+        <div className="col-span-4 lg:col-span-2">
           <div className="card rounded-2xl shadow-lg p-3 bg-base-100 h-full">
             <div className="card-title">
               <div className="">
@@ -76,11 +76,14 @@ const JobCreatePage: FC = () => {
             </div>
           </div>
         </div>
-        <div className="col-span-2">
+        <div className="col-span-4 lg:col-span-2">
           <div className="card rounded-2xl shadow-lg p-3 bg-base-100 h-full max-h-[400px]">
             <div className="card-title">
               <div className="">
-                <h1>Create Job</h1>
+                <h1>Worker Selected</h1>
+              </div>
+              <div className=" badge badge-primary">
+                {selectedWorkers.length}
               </div>
             </div>
             <div className="card-body rounded-2xl bg-base-200 overflow-y-auto ">
