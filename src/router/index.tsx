@@ -6,6 +6,8 @@ import { ReactNode } from "react"
 import DrawerLayout from "../components/layouts/DrawerLayout"
 import JobPage from "../pages/job/JobPage"
 import AddJobPage from "../pages/job/AddJobPage"
+import WorkerListPage from "../pages/worker/WorkerListPage"
+import WorkerCreatePage from "../pages/worker/WorkerCreatePage"
 
 declare module "react-router-dom" {
   interface NonIndexRouteObject {
@@ -45,6 +47,25 @@ export const contentRouter: RouteObject[] = [
             name: "New Job",
             element: <AddJobPage />,
             icon: <i className="bx bx-book-add"></i>
+          }
+        ]
+      },
+      {
+        path: "/workers",
+        name: "Workers",
+        icon: <i className="bx bx-hard-hat"></i>,
+        children: [
+          {
+            path: "/workers",
+            name: "Worker List",
+            element: <WorkerListPage />,
+            icon: <i className="bx bx-book-content"></i>
+          },
+          {
+            path: "/workers/create",
+            name: "Worker Create",
+            element: <WorkerCreatePage />,
+            icon: <i className="bx bxs-file-plus"></i>
           }
         ]
       }
