@@ -37,6 +37,8 @@ const AttendanceTable: FC<{ jobId: string }> = ({ jobId }) => {
     }
   }, [jobId])
 
+  
+
   const handleCreateAttendance = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault()
@@ -156,6 +158,8 @@ const AttendanceTable: FC<{ jobId: string }> = ({ jobId }) => {
     fetchData()
   }, [fetchData])
 
+  
+
   if (loading) return <div className="loading">Loading...</div>
   if (error) return <div className="error">{error}</div>
   if (!jobData) return <div className="no-data">No job data available</div>
@@ -163,12 +167,12 @@ const AttendanceTable: FC<{ jobId: string }> = ({ jobId }) => {
   return (
     <>
       <div className="overflow-x-auto">
-        <table className="table w-auto">
+        <table className="table table-xs table-pin-rows table-pin-cols w-auto">
           <thead>
             <tr>
               <th className="px-4 py-2">Worker</th>
               {jobData.attendance.map((day, index) => (
-                <th key={day.date || index} className="px-4 py-2">
+                <th key={index} className="px-4 py-2">
                   {day.date}
                 </th>
               ))}
@@ -183,8 +187,8 @@ const AttendanceTable: FC<{ jobId: string }> = ({ jobId }) => {
             </tr>
           </thead>
           <tbody>
-            {jobData.workers.map((worker) => (
-              <tr key={worker._id}>
+            {jobData.workers.map((worker, workIndex) => (
+              <tr key={workIndex}>
                 <td className="px-4 py-2">{worker.name}</td>
                 {jobData.attendance.map((day, dayIndex) => {
                   const workerAttendance = day.workers.find(
@@ -214,11 +218,11 @@ const AttendanceTable: FC<{ jobId: string }> = ({ jobId }) => {
           </tbody>
           <tfoot>
             <tr>
-              <td className="px-4 py-2 font-bold">Total Present</td>
+              <th className="px-4 py-2 font-bold">Total Present</th>
               {jobData.attendance.map((day, index) => (
-                <td key={day.date || index} className="px-4 py-2 text-center">
+                <th key={day.date || index} className="px-4 py-2 text-center">
                   {day.totalPresent}
-                </td>
+                </th>
               ))}
             </tr>
           </tfoot>
