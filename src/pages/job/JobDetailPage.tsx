@@ -1,9 +1,12 @@
 import { FC } from "react"
+import AttendanceTable from "../../components/base/attendance/AttendanceTable"
+import {  useParams } from "react-router-dom"
 
 const JobDetailPage: FC = () => {
+  const { jobId } = useParams()
   return (
     <>
-      <h1>Hello</h1>
+      <AttendanceTable jobId={jobId as string} />
     </>
   )
 }

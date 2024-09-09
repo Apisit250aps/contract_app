@@ -11,6 +11,35 @@ export interface IJob {
   ratePerArea?: number
   workers?: string[]
 }
+export interface IJobWorker {
+  _id: string
+  name: string
+  contactInfo: string
+  createdAt: string
+  updatedAt: string
+  __v: number
+}
+
+export interface IJobWorkerAttendance {
+  _id: string
+  worker: IJobWorker
+  attendanceId: string
+  present: boolean
+}
+
+export interface IJobAttendanceDay {
+  date: string
+  totalPresent: number
+  workers: IJobWorkerAttendance[]
+}
+
+export interface IJobJob {
+  _id: string
+  title: string
+  description: string
+  workers: IJobWorker[]
+  attendance: IJobAttendanceDay[]
+}
 
 export default {
   async createJob(data: IJob): Promise<AxiosResponse> {
@@ -50,5 +79,22 @@ export default {
       }
       throw new Error("An unexpected error occurred")
     }
-  }
+  },
+  async getJobId(id: string): Promise<AxiosResponse> {
+    try {
+      const response = await apiClient({
+        method: "get",
+        url: `/job/get/${id}`
+      })
+      return response
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(
+          error.response?.data?.message || "Failed to create worker"
+        )
+      }
+      throw new Error("An unexpected error occurred")
+    }
+  },
+  
 }

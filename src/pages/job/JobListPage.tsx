@@ -45,8 +45,7 @@ const JobListPage: FC = () => {
           <JobData
             onPaginationChange={paginationChange}
             limit={limit}
-            page={page}
-          />
+            page={page} onAction={true}          />
         </div>
         <div className="card-actions">
           <Pagination

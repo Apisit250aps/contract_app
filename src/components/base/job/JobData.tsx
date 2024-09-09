@@ -2,10 +2,12 @@ import { FC, useCallback, useEffect, useState } from "react"
 import Swal from "sweetalert2"
 import jobService, { IJob } from "../../../services/job.service"
 import { AxiosResponse } from "axios"
+import { useNavigate } from "react-router-dom"
 
 interface JobDataProps {
   limit?: number
   page?: number
+  onAction: boolean
   onPaginationChange: (
     currentPage: number,
     totalPages: number,
@@ -17,13 +19,14 @@ interface JobDataProps {
 const JobData: FC<JobDataProps> = ({
   limit = 10,
   page = 1,
+  onAction = false,
   onPaginationChange,
   onSelectionChange
 }) => {
   const [jobData, setJobData] = useState<IJob[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedJobs, setSelectedJobs] = useState<IJob[]>([])
-
+  const navigate = useNavigate()
   const fetchData = useCallback(async () => {
     try {
       setLoading(true)
@@ -76,7 +79,6 @@ const JobData: FC<JobDataProps> = ({
     )
   }
 
-
   return (
     <div className="overflow-x-auto">
       <table className="table table-pin-rows table-pin-cols">
@@ -90,6 +92,13 @@ const JobData: FC<JobDataProps> = ({
             <th>Area Size</th>
             <th>Rate Per Area</th>
             <th>Workers Count</th>
+            {onAction ? (
+              <>
+                <th>Detail</th>
+              </>
+            ) : (
+              <></>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -120,6 +129,20 @@ const JobData: FC<JobDataProps> = ({
               <td>{job.areaSize || "-"}</td>
               <td>{job.ratePerArea || "-"}</td>
               <td>{job.workers?.length || 0}</td>
+              {onAction ? (
+                <>
+                  <td>
+                    <button
+                      className="btn btn-ghost"
+                      onClick={() => navigate(`/jobs/${job._id}`)}
+                    >
+                      <i className="bx bx-message-square-detail"></i>
+                    </button>
+                  </td>
+                </>
+              ) : (
+                <></>
+              )}
             </tr>
           ))}
         </tbody>
