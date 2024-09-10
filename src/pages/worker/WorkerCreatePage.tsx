@@ -3,7 +3,7 @@ import InputLabelInside from "../../components/forms/inputs/InputLabelInside"
 import workerService, { IWorker } from "../../services/worker.service"
 import Swal from "sweetalert2"
 import axios from "axios"
-const WorkerCreatePage: FC = () => {
+const WorkCreateForm: FC = () => {
   const [worker_name, setWorkerName] = useState<string>("")
   const [worker_contact, setWorkerContact] = useState<string>("")
 
@@ -37,38 +37,34 @@ const WorkerCreatePage: FC = () => {
 
   return (
     <>
-      <div className="grid grid-cols-3">
-        <div className="col-span-1">
-          <div className="card rounded-2xl shadow-lg p-3 bg-base-100">
-            <div className="card-title flex items-center justify-between px-3">
-              <div className="">
-                <h1>New Worker</h1>
-              </div>
-            </div>
-            <div className="card-body p-3 rounded-2xl">
-              <form onSubmit={handleSubmit}>
-                <InputLabelInside
-                  label="Name"
-                  value={worker_name}
-                  set={(e) => setWorkerName(e.target.value)}
-                  name="worker-name"
-                />
-                <InputLabelInside
-                  label="Contact"
-                  value={worker_contact}
-                  set={(e) => setWorkerContact(e.target.value)}
-                  name="worker-contact"
-                />
-                <div className="justify-end flex">
-                  <button className="btn btn-primary">Create</button>
-                </div>
-              </form>
-            </div>
+      <div className="card rounded-2xl shadow-lg p-3 bg-base-100">
+        <div className="card-title flex items-center justify-between px-3">
+          <div className="">
+            <h1>New Worker</h1>
           </div>
+        </div>
+        <div className="card-body p-3 rounded-2xl">
+          <form onSubmit={handleSubmit}>
+            <InputLabelInside
+              label="Name"
+              value={worker_name}
+              set={(e) => setWorkerName(e.target.value)}
+              name="worker-name"
+            />
+            <InputLabelInside
+              label="Contact"
+              value={worker_contact}
+              set={(e) => setWorkerContact(e.target.value)}
+              name="worker-contact"
+            />
+            <div className="justify-end flex">
+              <button className="btn btn-primary">Create</button>
+            </div>
+          </form>
         </div>
       </div>
     </>
   )
 }
 
-export default WorkerCreatePage
+export default WorkCreateForm

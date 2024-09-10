@@ -2,6 +2,7 @@ import { FC, useCallback, useMemo, useState } from "react"
 import WorkerData from "../../components/base/worker/WorkerData"
 import Pagination from "../../components/navigate/paginations/Pagination"
 import { IWorker } from "../../services/worker.service"
+import WorkCreateForm from "./WorkerCreatePage"
 // import { IWorker } from "../../services/worker.service"
 
 const WorkerListPage: FC = () => {
@@ -53,37 +54,44 @@ const WorkerListPage: FC = () => {
 
   return (
     <>
-      <div className="card p-3 bg-base-100 shadow-lg h-[90vh]">
-        <div className="card-title flex flex-row justify-between items-center p-3">
-          <div className="">
-            <h1>Workers</h1>
-          </div>
-          <div className="actions flex flex-row items-center justify-end">
-            <select
-              value={limit}
-              className="select w-full max-w-xs bg-base-200"
-              onChange={(e) => setLimit(Number(e.target.value))}
-            >
-              <option value={10}>10</option>
-              <option value={25}>25</option>
-              <option value={50}>50</option>
-            </select>
-            <div className="">{renderActions}</div>
+      <div className="grid grid-cols-3 gap-3">
+        <div className="col-span-2">
+          <div className="card p-3 bg-base-100 shadow-lg h-[90vh]">
+            <div className="card-title flex flex-row justify-between items-center p-3">
+              <div className="">
+                <h1>Workers</h1>
+              </div>
+              <div className="actions flex flex-row items-center justify-end">
+                <select
+                  value={limit}
+                  className="select w-full max-w-xs bg-base-200"
+                  onChange={(e) => setLimit(Number(e.target.value))}
+                >
+                  <option value={10}>10</option>
+                  <option value={25}>25</option>
+                  <option value={50}>50</option>
+                </select>
+                <div className="flex flex-row">{renderActions}</div>
+              </div>
+            </div>
+            <div className="card-body overflow-y-auto">
+              <WorkerData
+                limit={limit}
+                page={page}
+                onPaginationChange={handlePaginationChange}
+                onSelectionChange={handleSelectionChange}
+              />
+            </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
           </div>
         </div>
-        <div className="card-body overflow-y-auto">
-          <WorkerData
-            limit={limit}
-            page={page}
-            onPaginationChange={handlePaginationChange}
-            onSelectionChange={handleSelectionChange}
-          />
+        <div className="col-span-1">
+          <WorkCreateForm />
         </div>
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
       </div>
     </>
   )

@@ -7,8 +7,8 @@ import DrawerLayout from "../components/layouts/DrawerLayout"
 import JobListPage from "../pages/job/JobListPage"
 import JobCreatePage from "../pages/job/JobCreatePage"
 import WorkerListPage from "../pages/worker/WorkerListPage"
-import WorkerCreatePage from "../pages/worker/WorkerCreatePage"
 import JobDetailPage from "../pages/job/JobDetailPage"
+import { jobDetailLoader } from "./loaders/job.loader"
 
 declare module "react-router-dom" {
   interface NonIndexRouteObject {
@@ -54,7 +54,8 @@ export const contentRouter: RouteObject[] = [
           {
             path: "/jobs/:jobId",
             element: <JobDetailPage />,
-            visible: true
+            visible: true,
+            loader: jobDetailLoader
           }
         ]
       },
@@ -69,12 +70,7 @@ export const contentRouter: RouteObject[] = [
             element: <WorkerListPage />,
             icon: <i className="bx bx-book-content"></i>
           },
-          {
-            path: "/workers/create",
-            name: "Worker Create",
-            element: <WorkerCreatePage />,
-            icon: <i className="bx bxs-file-plus"></i>
-          }
+          
         ]
       }
     ]

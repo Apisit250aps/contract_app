@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from "react"
+import { FC, useCallback, useState } from "react"
 import jobService, {
   IJobJob,
   IJobWorkerAttendance
@@ -10,9 +10,9 @@ import attendanceService, {
 import InputLabelInside from "../../forms/inputs/InputLabelInside"
 import Swal from "sweetalert2"
 
-const AttendanceTable: FC<{ jobId: string }> = ({ jobId }) => {
-  const [loading, setLoading] = useState<boolean>(true)
-  const [jobData, setJobData] = useState<IJobJob | null>(null)
+const AttendanceTable: FC<{ JobDetail: IJobJob }> = ({ JobDetail }) => {
+  const [loading, setLoading] = useState<boolean>(false)
+  const [jobData, setJobData] = useState<IJobJob | null>(JobDetail)
   const [error, setError] = useState<string | null>(null)
 
   const [createDateModal, createDateModalStat] = useState<boolean>(false)
@@ -23,7 +23,7 @@ const AttendanceTable: FC<{ jobId: string }> = ({ jobId }) => {
     setLoading(true)
     setError(null)
     try {
-      const response = await jobService.getJobId(jobId)
+      const response = await jobService.getJobId(jobData?._id as string)
       if (response.status === 200) {
         setJobData(response.data[0] as IJobJob)
       } else {
@@ -35,9 +35,7 @@ const AttendanceTable: FC<{ jobId: string }> = ({ jobId }) => {
     } finally {
       setLoading(false)
     }
-  }, [jobId])
-
-  
+  }, [jobData?._id])
 
   const handleCreateAttendance = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
@@ -153,10 +151,6 @@ const AttendanceTable: FC<{ jobId: string }> = ({ jobId }) => {
     },
     [jobData, fetchData]
   )
-
-  useEffect(() => {
-    fetchData()
-  }, [fetchData])
 
   
 

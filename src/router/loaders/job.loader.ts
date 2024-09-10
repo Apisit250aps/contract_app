@@ -1,25 +1,24 @@
-import { LoaderFunction, LoaderFunctionArgs } from "react-router-dom"
-import jobService, { IJobJob } from "../../services/job.service"
+import { LoaderFunction, LoaderFunctionArgs, defer } from "react-router-dom";
+import jobService from "../../services/job.service";
 
-export const jobLoader: LoaderFunction = async ({
+export const jobDetailLoader: LoaderFunction = async ({
   params
-}: LoaderFunctionArgs): Promise<IJobJob> => {
+}: LoaderFunctionArgs) => {
   if (!params.jobId) {
-    throw new Error("Job ID is required")
+    throw new Response("Job ID is required", { status: 400 });
   }
 
   try {
-    const response = await jobService.getJobId(params.jobId)
+    const jobPromise = jobService.getJobId(params.jobId).then(response => {
+      if (response.status !== 200) {
+        throw new Response("Failed to load job", { status: response.status });
+      }
+      return response.data[0];
+    });
 
-    if (response.status !== 200) {
-      throw new Error(`Failed to load job. Status: ${response.status}`)
-    }
-
-    return response.data[0]
+    return defer({ job: jobPromise });
   } catch (error) {
-    if (error instanceof Error) {
-      throw new Error(`Error loading job: ${error.message}`)
-    }
-    throw new Error("An unexpected error occurred while loading the job")
+    console.error("Error in jobDetailLoader:", error);
+    throw new Response("An unexpected error occurred while loading the job", { status: 500 });
   }
-}
+};
