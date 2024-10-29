@@ -1,7 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import DashboardLayout from "./layouts/DashboardLayout"
+import EmployeePage from "./pages/EmployeePage"
 import IndexPage from "./pages/IndexPage"
-import EmployeePage from "./pages/EmployeePage";
+import NotFound from "./pages/NotFound"
 
 const App = () => (
   <BrowserRouter>
@@ -11,7 +12,7 @@ const App = () => (
         <Route index element={<IndexPage />} />
         <Route path="employee" element={<EmployeePage />} />
       </Route>
-      {/* <Route path="*" element={<NotFound />} /> */}
+      <Route path="*" element={<NotFound />} />
     </Routes>
   </BrowserRouter>
 )

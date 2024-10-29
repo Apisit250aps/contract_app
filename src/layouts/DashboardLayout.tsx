@@ -1,21 +1,40 @@
 import { FC } from "react"
 import { Outlet } from "react-router-dom"
 import SideMenu, { MenuNav, MenuParent } from "../components/menu/SideMenu"
+import Navbar from "../components/navigate/Navbar"
+
+export const OpenDrawer: FC = () => {
+  return (
+    <>
+      <label
+        htmlFor="dashboard-layout"
+        className="btn btn-square btn-ghost lg:hidden"
+      >
+        <i className="bx bx-menu-alt-left"></i>
+      </label>
+    </>
+  )
+}
 
 const DashboardLayout: FC = () => {
   return (
     <>
       <div className="drawer lg:drawer-open">
-        <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-        <div className="drawer-content ">
+        <input
+          id="dashboard-layout"
+          type="checkbox"
+          className="drawer-toggle"
+        />
+        <div className="drawer-content">
           {/* Page content here */}
           <main className="p-3">
+            <Navbar title={"Contracting"} leading={<OpenDrawer />} />
             <Outlet />
           </main>
         </div>
-        <div className="drawer-side">
+        <div className="drawer-side py-3">
           <label
-            htmlFor="my-drawer-2"
+            htmlFor="dashboard-layout"
             aria-label="close sidebar"
             className="drawer-overlay"
           ></label>

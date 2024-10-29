@@ -37,7 +37,7 @@ export const MenuNav: FC<{
 const SideMenu: FC<{ children?: ReactNode }> = ({ children }) => {
   return (
     <>
-      <ul className="menu bg-base-200 rounded-box w-56 p-4 min-h-full">
+      <ul className="menu bg-base-100 rounded-e-2xl w-56 p-4 min-h-full">
         {children}
       </ul>
     </>
