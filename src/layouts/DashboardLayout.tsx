@@ -1,5 +1,6 @@
 import { FC } from "react"
-import { NavLink, Outlet } from "react-router-dom"
+import { Outlet } from "react-router-dom"
+import SideMenu, { MenuNav, MenuParent } from "../components/menu/SideMenu"
 
 const DashboardLayout: FC = () => {
   return (
@@ -8,7 +9,7 @@ const DashboardLayout: FC = () => {
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content ">
           {/* Page content here */}
-          <main>
+          <main className="p-3">
             <Outlet />
           </main>
         </div>
@@ -18,20 +19,12 @@ const DashboardLayout: FC = () => {
             aria-label="close sidebar"
             className="drawer-overlay"
           ></label>
-          <ul className="menu bg-base-200 text-base-content min-h-full w-auto p-4">
-            {/* Sidebar content here */}
-            <li>
-              <NavLink
-                to="/dashboard"
-                className={({ isActive }) => (isActive ? "active" : "")}
-              >
-                <span>Home</span>
-              </NavLink>
-            </li>
-            <li>
-              <a>Sidebar Item 2</a>
-            </li>
-          </ul>
+          <SideMenu>
+            <MenuParent title={"Dashboard"}>
+              <MenuNav to={"/"}>Home</MenuNav>
+              <MenuNav to={"/employee"}>Employee</MenuNav>
+            </MenuParent>
+          </SideMenu>
         </div>
       </div>
     </>
