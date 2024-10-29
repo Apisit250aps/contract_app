@@ -1,10 +1,10 @@
 import { FC } from "react"
 
-const LoginPage: FC = () => {
+const RegisterPage: FC = () => {
   return (
     <>
       <div className="text-center lg:text-left">
-        <h1 className="text-5xl font-bold">Login now!</h1>
+        <h1 className="text-5xl font-bold">Register now!</h1>
         <p className="py-6">
           Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
           excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a
@@ -49,4 +49,4 @@ const LoginPage: FC = () => {
   )
 }
 
-export default LoginPage
+export default RegisterPage
